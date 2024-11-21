@@ -1,0 +1,14 @@
+{
+  "tasks": {
+    "cli": "deno run --allow-read --allow-write cli.ts"
+  },
+  "imports": {
+    "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.7",
+    "@cliffy/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.7",
+    "@std/assert": "jsr:@std/assert@^0.218.2",
+    "@std/fs": "jsr:@std/fs@^0.218.2",
+    "@std/path": "jsr:@std/path@^1.0.8",
+    "@/": "./",
+    "@/generators/": "./generators/"
+  }
+}
