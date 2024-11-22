@@ -1,5 +1,5 @@
 import { Config, getConfig, saveConfig } from '@/config.ts';
-import { Confirm, Input } from '@cliffy/prompt';
+import { Confirm, Input, Select } from '@cliffy/prompt';
 
 // cli.ts
 import { Command } from '@cliffy/command';
@@ -32,17 +32,22 @@ cli
     );
     if (update) {
       const newConfig: Config = {
-        schemaDir: await Input.prompt({
-          message: 'Enter the schema directory:',
-          default: config.schemaDir,
-        }),
         dbDir: await Input.prompt({
           message: 'Enter the directory for your db client:',
           default: config.dbDir,
         }),
+        defaultIdType: (await Select.prompt<'integer' | 'uuid'>({
+          message: 'What data type should be used for IDs?',
+          options: ['integer', 'uuid'],
+          default: config.defaultIdType,
+        })) as 'integer' | 'uuid',
         resourcesDir: await Input.prompt({
           message: 'Enter the resources directory:',
           default: config.resourcesDir,
+        }),
+        schemaDir: await Input.prompt({
+          message: 'Enter the schema directory:',
+          default: config.schemaDir,
         }),
       };
 
@@ -57,26 +62,32 @@ cli
   .action(async () => {
     const existingConfig = await getConfig();
     const config: Config = {
-      schemaDir: await Input.prompt({
-        message: 'Enter the schema directory:',
-        default: existingConfig.schemaDir,
-      }),
       dbDir: await Input.prompt({
         message: 'Enter the directory for your db client:',
         default: existingConfig.dbDir,
       }),
+      defaultIdType: (await Select.prompt<'integer' | 'uuid'>({
+        message: 'What data type should be used for IDs?',
+        options: ['integer', 'uuid'],
+        default: existingConfig.defaultIdType,
+      })) as 'integer' | 'uuid',
       resourcesDir: await Input.prompt({
         message: 'Enter the resources directory:',
         default: existingConfig.resourcesDir,
+      }),
+      schemaDir: await Input.prompt({
+        message: 'Enter the schema directory:',
+        default: existingConfig.schemaDir,
       }),
     };
 
     await saveConfig(config);
     console.log('Configuration file created/updated successfully.');
 
-    const createDirs = await Confirm.prompt(
-      'Do you want to create the specified directories?'
-    );
+    const createDirs = await Confirm.prompt({
+      message: 'Do you want to create the specified directories?',
+      default: true,
+    });
     if (createDirs) {
       await ensureDir(config.schemaDir);
       await ensureDir(config.dbDir);
