@@ -1,27 +1,26 @@
+import { formatFile, standardizeName } from '@/utils.ts';
+
 import { Config } from '@/config.ts';
-import _ from 'lodash';
 import { ensureDir } from '@std/fs';
-import { formatFile } from '@/utils.ts';
 import { join } from '@std/path';
-import pluralize from 'pluralize';
 
 export async function generateSchema(
   config: Config,
   tableName: string
 ): Promise<void> {
+  const names = standardizeName(tableName);
+
   const schemaDir = config.schemaDir;
   await ensureDir(schemaDir);
-  const pluralName = pluralize(tableName.toLowerCase());
-  const singluarName = pluralize.singular(pluralName);
 
-  const fileName = `${_.kebabCase(pluralName)}.ts`;
+  const fileName = `${names.kebabCase}.ts`;
   const filePath = join(schemaDir, fileName);
 
   const schemaContent = `
     import { boolean, index, integer, pgTable, relations, text, timestamp } from "drizzle-orm/pg-core";
 
-    export const ${pluralName}Table = pgTable(
-      '${pluralName}',
+    export const ${names.camelCase}Table = pgTable(
+      '${names.snakeCase}',
       {
         id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
         name: text('name'),
@@ -35,11 +34,11 @@ export async function generateSchema(
           .$onUpdate(() => new Date()),
       },
       (table) => ({
-        nameIdx: index('${pluralName}_name_idx').using('btree', table.name),
+        nameIdx: index('${names.snakeCase}_name_idx').using('btree', table.name),
       }),
     );
 
-    export const ${singluarName}Relations = relations(${pluralName}Table, () => ({}));
+    export const ${names.camelCase}Relations = relations(${names.camelCase}Table, () => ({}));
   `;
 
   await Deno.writeTextFile(filePath, schemaContent);
@@ -53,10 +52,9 @@ export async function updateSchemaIndex(
   config: Config,
   tableName: string
 ): Promise<void> {
+  const names = standardizeName(tableName);
   const schemaDir = config.schemaDir;
   const indexPath = join(schemaDir, 'index.ts');
-  const pluralName = pluralize(tableName.toLowerCase());
-  const singluarName = pluralize.singular(pluralName);
 
   let indexContent: string;
   try {
@@ -67,9 +65,7 @@ export async function updateSchemaIndex(
   }
 
   // Check if the export already exists
-  const exportLine = `export { ${pluralName}Table, ${singluarName}Relations } from './${_.kebabCase(
-    pluralName
-  )}';`;
+  const exportLine = `export { ${names.camelCase}Table, ${names.camelCase}Relations } from './${names.kebabCase}';`;
 
   if (!indexContent.includes(exportLine)) {
     indexContent += `\n${exportLine}`;
