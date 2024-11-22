@@ -19,7 +19,6 @@ export async function generateTypeDefinitions(
 
   const typeDefinitionContent = `
     import { ${names.camelCase}Table } from '@/${config.schemaDir}';
-    import { z } from 'zod';
 
     export type ${names.singularPascalCase}Type = typeof ${names.camelCase}Table.$inferSelect;
     export type ${names.singularPascalCase}Input = typeof ${names.camelCase}Table.$inferInsert;

@@ -1,6 +1,7 @@
 {
   "tasks": {
-    "cli": "deno run --allow-read --allow-run --allow-write cli.ts"
+    "cli": "deno run --allow-read --allow-run --allow-write cli.ts",
+    "compile": "deno compile --allow-read --allow-run --allow-write --allow-env cli.ts"
   },
   "imports": {
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.7",

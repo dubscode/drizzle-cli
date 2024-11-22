@@ -17,21 +17,18 @@ export async function generateSchema(
   const filePath = join(schemaDir, fileName);
 
   const schemaContent = `
-    import { boolean, index, integer, pgTable, relations, text, timestamp } from "drizzle-orm/pg-core";
+    import { boolean, index, pgTable, text } from "drizzle-orm/pg-core";
+
+    import { relations } from "drizzle-orm";
+    import { id, timestamps } from "./column.helpers";
 
     export const ${names.camelCase}Table = pgTable(
       '${names.snakeCase}',
       {
-        id: integer('id').primaryKey().generatedAlwaysAsIdentity(),
+        ...id,
         name: text('name'),
-        isActive: boolean('is_active').defaultTo(true),
-        created: timestamp('created', { precision: 6, withTimezone: true })
-          .defaultNow()
-          .notNull(),
-        updated: timestamp('updated', { precision: 6, withTimezone: true })
-          .defaultNow()
-          .notNull()
-          .$onUpdate(() => new Date()),
+        isActive: boolean('is_active').default(true),
+        ...timestamps,
       },
       (table) => ({
         nameIdx: index('${names.snakeCase}_name_idx').using('btree', table.name),
@@ -66,11 +63,11 @@ export async function updateSchemaIndex(
 
   // Create a regular expression to search for existing exports
   const exportRegex = new RegExp(
-    `export\\s+\\{\\s*${names.camelCase}Relations,\\s*${names.camelCase}Tables\\s*\\}\\s+from\\s+['"]\\./${names.kebabCase}['"];?`
+    `export\\s+\\{\\s*${names.camelCase}Relations,\\s*${names.camelCase}Table\\s*\\}\\s+from\\s+['"]\\./${names.kebabCase}['"];?`
   );
 
   if (!exportRegex.test(indexContent)) {
-    indexContent += `\nexport { ${names.camelCase}Relations, ${names.camelCase}Tables } from './${names.kebabCase}';`;
+    indexContent += `\nexport { ${names.camelCase}Relations, ${names.camelCase}Table } from './${names.kebabCase}';`;
     await Deno.writeTextFile(indexPath, indexContent);
     await formatFile(indexPath);
     console.log(`Updated schema index: ${indexPath}`);
