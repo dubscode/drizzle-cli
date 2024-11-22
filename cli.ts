@@ -5,6 +5,7 @@ import { generateSchema, updateSchemaIndex } from '@/generators/schema.ts';
 // cli.ts
 import { Command } from '@cliffy/command';
 import { ensureDir } from '@std/fs';
+import { generateApis } from '@/generators/apis.ts';
 import { generateColumnHelpers } from '@/generators/column.helpers.ts';
 import { generateTypeDefinitions } from '@/generators/type-defintions.ts';
 import { generateValidators } from '@/generators/validators.ts';
@@ -24,6 +25,7 @@ cli
     await updateSchemaIndex(config, tableName);
     await generateValidators(config, tableName);
     await generateTypeDefinitions(config, tableName);
+    await generateApis(config, tableName);
     console.log('Schema generation complete.');
   });
 
