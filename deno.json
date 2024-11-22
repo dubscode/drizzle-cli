@@ -1,8 +1,6 @@
 {
   "tasks": {
-    "cli": "deno run --allow-read --allow-run --allow-write cli.ts",
-    "release": "deno run -A npm:npx commit-and-tag-version",
-    "release:minor": "deno run -A npm:npx commit-and-tag-version --release-as minor"
+    "cli": "deno run --allow-read --allow-run --allow-write cli.ts"
   },
   "imports": {
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.7",
