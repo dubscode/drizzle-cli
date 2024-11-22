@@ -11,6 +11,8 @@
     "@std/fs": "jsr:@std/fs@^0.218.2",
     "@std/path": "jsr:@std/path@^1.0.8",
     "@/": "./",
-    "@/generators/": "./generators/"
+    "@/generators/": "./generators/",
+    "lodash": "npm:lodash@^4.17.21",
+    "pluralize": "jsr:@wei/pluralize@^8.0.2"
   }
 }
