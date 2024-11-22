@@ -3,16 +3,14 @@ import { exists } from '@std/fs';
 
 export interface Config {
   schemaDir: string;
-  typesDir: string;
-  validationsDir: string;
-  apisDir: string;
+  dbDir: string;
+  resourcesDir: string;
 }
 
 const defaultConfig: Config = {
   schemaDir: 'lib/db/schema',
-  typesDir: 'lib/types',
-  validationsDir: 'lib/validations',
-  apisDir: 'lib/apis',
+  dbDir: 'lib/db',
+  resourcesDir: 'lib/resources',
 };
 
 export async function getConfig(): Promise<Config> {
@@ -31,9 +29,8 @@ export async function saveConfig(config: Config): Promise<void> {
 
 export interface Config {
   schemaDir: string;
-  typesDir: string;
-  validationsDir: string;
-  apisDir: string;
+  dbDir: string;
+  resourcesDir: string;
 }
 
 export const config: Config = ${JSON.stringify(config, null, 2)};

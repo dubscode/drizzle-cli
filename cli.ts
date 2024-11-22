@@ -36,17 +36,13 @@ cli
           message: 'Enter the schema directory:',
           default: config.schemaDir,
         }),
-        typesDir: await Input.prompt({
-          message: 'Enter the types directory:',
-          default: config.typesDir,
+        dbDir: await Input.prompt({
+          message: 'Enter the directory for your db client:',
+          default: config.dbDir,
         }),
-        validationsDir: await Input.prompt({
-          message: 'Enter the validations directory:',
-          default: config.validationsDir,
-        }),
-        apisDir: await Input.prompt({
-          message: 'Enter the APIs directory:',
-          default: config.apisDir,
+        resourcesDir: await Input.prompt({
+          message: 'Enter the resources directory:',
+          default: config.resourcesDir,
         }),
       };
 
@@ -65,17 +61,13 @@ cli
         message: 'Enter the schema directory:',
         default: existingConfig.schemaDir,
       }),
-      typesDir: await Input.prompt({
-        message: 'Enter the types directory:',
-        default: existingConfig.typesDir,
+      dbDir: await Input.prompt({
+        message: 'Enter the directory for your db client:',
+        default: existingConfig.dbDir,
       }),
-      validationsDir: await Input.prompt({
-        message: 'Enter the validations directory:',
-        default: existingConfig.validationsDir,
-      }),
-      apisDir: await Input.prompt({
-        message: 'Enter the APIs directory:',
-        default: existingConfig.apisDir,
+      resourcesDir: await Input.prompt({
+        message: 'Enter the resources directory:',
+        default: existingConfig.resourcesDir,
       }),
     };
 
@@ -87,9 +79,8 @@ cli
     );
     if (createDirs) {
       await ensureDir(config.schemaDir);
-      await ensureDir(config.typesDir);
-      await ensureDir(config.validationsDir);
-      await ensureDir(config.apisDir);
+      await ensureDir(config.dbDir);
+      await ensureDir(config.resourcesDir);
       console.log('Directories created successfully.');
     }
   });
