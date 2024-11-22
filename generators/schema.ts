@@ -64,11 +64,13 @@ export async function updateSchemaIndex(
     indexContent = '';
   }
 
-  // Check if the export already exists
-  const exportLine = `export { ${names.camelCase}Table, ${names.camelCase}Relations } from './${names.kebabCase}';`;
+  // Create a regular expression to search for existing exports
+  const exportRegex = new RegExp(
+    `export\\s+\\{\\s*${names.camelCase}Relations,\\s*${names.camelCase}Tables\\s*\\}\\s+from\\s+['"]\\./${names.kebabCase}['"];?`
+  );
 
-  if (!indexContent.includes(exportLine)) {
-    indexContent += `\n${exportLine}`;
+  if (!exportRegex.test(indexContent)) {
+    indexContent += `\nexport { ${names.camelCase}Relations, ${names.camelCase}Tables } from './${names.kebabCase}';`;
     await Deno.writeTextFile(indexPath, indexContent);
     await formatFile(indexPath);
     console.log(`Updated schema index: ${indexPath}`);
