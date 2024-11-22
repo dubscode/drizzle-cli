@@ -6,6 +6,7 @@ import { generateSchema, updateSchemaIndex } from '@/generators/schema.ts';
 import { Command } from '@cliffy/command';
 import { ensureDir } from '@std/fs';
 import { generateColumnHelpers } from '@/generators/column.helpers.ts';
+import { generateValidators } from '@/generators/validators.ts';
 
 const cli = new Command()
   .name('drizzle-cli')
@@ -20,6 +21,7 @@ cli
     const tableName = await Input.prompt('Enter the table name:');
     await generateSchema(config, tableName);
     await updateSchemaIndex(config, tableName);
+    await generateValidators(config, tableName);
     console.log('Schema generation complete.');
   });
 
