@@ -1,11 +1,11 @@
 import { Config, getConfig, saveConfig } from '@/config.ts';
 import { Confirm, Input, Select } from '@cliffy/prompt';
+import { generateSchema, updateSchemaIndex } from '@/generators/schema.ts';
 
 // cli.ts
 import { Command } from '@cliffy/command';
 import { ensureDir } from '@std/fs';
 import { generateColumnHelpers } from '@/generators/column.helpers.ts';
-import { generateSchema } from '@/generators/schema.ts';
 
 const cli = new Command()
   .name('drizzle-cli')
@@ -19,6 +19,7 @@ cli
     const config = await getConfig();
     const tableName = await Input.prompt('Enter the table name:');
     await generateSchema(config, tableName);
+    await updateSchemaIndex(config, tableName);
     console.log('Schema generation complete.');
   });
 

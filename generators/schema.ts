@@ -48,3 +48,33 @@ export async function generateSchema(
 
   console.log(`Generated schema file: ${filePath}`);
 }
+
+export async function updateSchemaIndex(
+  config: Config,
+  tableName: string
+): Promise<void> {
+  const schemaDir = config.schemaDir;
+  const indexPath = join(schemaDir, 'index.ts');
+  const pluralName = pluralize(tableName.toLowerCase());
+  const singluarName = pluralize.singular(pluralName);
+
+  let indexContent: string;
+  try {
+    indexContent = await Deno.readTextFile(indexPath);
+  } catch {
+    // If index file doesn't exist, create it
+    indexContent = '';
+  }
+
+  // Check if the export already exists
+  const exportLine = `export { ${pluralName}Table, ${singluarName}Relations } from './${_.kebabCase(
+    pluralName
+  )}';`;
+
+  if (!indexContent.includes(exportLine)) {
+    indexContent += `\n${exportLine}`;
+    await Deno.writeTextFile(indexPath, indexContent);
+    await formatFile(indexPath);
+    console.log(`Updated schema index: ${indexPath}`);
+  }
+}
