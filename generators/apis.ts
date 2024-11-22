@@ -17,14 +17,15 @@ export async function generateApis(
   const fileName = `apis.ts`;
   const filePath = join(resourceDir, fileName);
 
+  const idType = config.defaultIdType === 'uuid' ? 'string' : 'number';
+
   const apisContent = `
     import _ from 'lodash';
     import { db } from '@/${config.dbDir}';
     import { eq } from 'drizzle-orm';
-    import { update${names.singularPascalCase}Schema } from '@/${config.resourcesDir}/${names.kebabCase}/validators.ts';
-    import { ${names.singularPascalCase}Input } from '@/${config.resourcesDir}/${names.kebabCase}/types.ts';
+    import { update${names.singularPascalCase}Schema } from '@/${config.resourcesDir}/${names.kebabCase}/validators';
+    import { ${names.singularPascalCase}Input } from '@/${config.resourcesDir}/${names.kebabCase}/types';
     import { ${names.camelCase}Table } from '@/${config.schemaDir}';
-    import { z } from 'zod';
 
     export async function create${names.singularPascalCase}(input: ${names.singularPascalCase}Input) {
       const data = update${names.singularPascalCase}Schema.parse(input);
@@ -39,7 +40,7 @@ export async function generateApis(
       return newRecord;
     }
 
-    export async function findById(id: string) {
+    export async function findById(id: ${idType}) {
       return await db.query.${names.camelCase}Table.findFirst({ where: eq(${names.camelCase}Table.id, id) });
     }
 
@@ -47,7 +48,7 @@ export async function generateApis(
       return await db.query.${names.camelCase}Table.findMany();
     }
 
-    export async function removeById(id: string) {
+    export async function removeById(id: ${idType}) {
       const [deletedRecord] = await db
         .delete(${names.camelCase}Table)
         .where(eq(${names.camelCase}Table.id, id))

@@ -22,6 +22,26 @@ The Drizzle Deno CLI is distributed as a pre-compiled executable, so you don't n
 3. Rename the downloaded file to `drizzle-cli` (or `drizzle-cli.exe` on Windows) for convenience.
 4. Move the executable to a directory in your system's PATH.
 
+## Setting up on your Mac
+
+Move it to /usr/local/bin
+
+```bash
+sudo mv drizzle-cli /usr/local/bin/
+```
+
+Check if it's in your PATH
+
+```bash
+which drizzle-cli
+```
+
+Verify the version
+
+```bash
+drizzle-cli --version
+```
+
 ## Usage
 
 Once installed, you can use the Drizzle Deno CLI from your terminal:
@@ -42,12 +62,6 @@ drizzle-cli generate
 
 ```
 drizzle-cli config
-```
-
-For more detailed information on each command, use the `--help` flag:
-
-```
-drizzle-cli --help
 ```
 
 ## Configuration
