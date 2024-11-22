@@ -1,5 +1,4 @@
 import { Config } from '@/config.ts';
-import _ from 'lodash';
 import { ensureDir } from '@std/fs';
 import { formatFile } from '@/utils.ts';
 import { join } from '@std/path';
