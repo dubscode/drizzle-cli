@@ -4,6 +4,7 @@ import { Confirm, Input, Select } from '@cliffy/prompt';
 // cli.ts
 import { Command } from '@cliffy/command';
 import { ensureDir } from '@std/fs';
+import { generateColumnHelpers } from '@/generators/column.helpers.ts';
 import { generateSchema } from '@/generators/schema.ts';
 
 const cli = new Command()
@@ -92,7 +93,8 @@ cli
       await ensureDir(config.schemaDir);
       await ensureDir(config.dbDir);
       await ensureDir(config.resourcesDir);
-      console.log('Directories created successfully.');
+      await generateColumnHelpers(config);
+      console.log('Directories and column helpers created successfully.');
     }
   });
 
